@@ -39,11 +39,7 @@ export default function LoginScreen() {
       await AsyncStorage.setItem("user", JSON.stringify(user));
 
       // Redirect
-      if (user.isAdmin) {
-        router.replace("/(tabs)/admin");
-      } else {
-        router.replace("/(tabs)");
-      }
+     router.replace("/(auth)/(tabs)/index");
     } catch (err: any) {
       console.error("Login failed:", err.response?.data || err.message);
 
