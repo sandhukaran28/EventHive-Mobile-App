@@ -1,7 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Slot, usePathname, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Slot, usePathname, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
 
 export default function Layout() {
   const [checking, setChecking] = useState(true);
@@ -11,17 +11,14 @@ export default function Layout() {
 
   useEffect(() => {
     const checkToken = async () => {
-      console.log('Checking login status...');
-      const token = await AsyncStorage.getItem('token');
-      console.log('Token:', token);
+      const token = await AsyncStorage.getItem("token");
 
       if (token) {
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
-        if (pathname !== '/login') {
-          console.log('Redirecting to /login...');
-          router.replace('/login'); // ✅ Only redirect if not already there
+        if (pathname !== "/login") {
+          router.replace("/login");
         }
       }
 
@@ -29,11 +26,11 @@ export default function Layout() {
     };
 
     checkToken();
-  }, [pathname]); // 👈 Depend on pathname to avoid infinite reruns
+  }, []); // 👈 Depend on pathname to avoid infinite reruns
 
   if (checking) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
         <Text>Checking login...</Text>
       </View>
