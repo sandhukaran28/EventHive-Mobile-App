@@ -29,7 +29,7 @@ export default function Dashboard() {
       });
       setEvents(res.data.events);
       setTotalPages(res.data.totalPages);
-    } catch (err:any) {
+    } catch (err: any) {
       console.error('Error fetching events:', err.response?.data || err.message);
     } finally {
       setLoading(false);
@@ -56,8 +56,8 @@ export default function Dashboard() {
             await axios.delete(`/events/${id}`, {
               headers: { Authorization: `Bearer ${token}` },
             });
-            setEvents((prev) => prev.filter((e:any) => e._id !== id));
-          } catch (err:any) {
+            setEvents((prev) => prev.filter((e: any) => e._id !== id));
+          } catch (err: any) {
             console.error('Delete failed:', err.response?.data || err.message);
             Alert.alert('Error', 'Failed to delete event.');
           }
@@ -76,6 +76,22 @@ export default function Dashboard() {
 
   return (
     <View style={styles.container}>
+      {/* Top Row */}
+      <View style={styles.headerRow}>
+        <TouchableOpacity onPress={() => router.push('/profile')}>
+          <Text style={styles.link}>Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={async () => {
+            await AsyncStorage.removeItem('token');
+            await AsyncStorage.removeItem('user');
+            router.replace('/login');
+          }}
+        >
+          <Text style={[styles.link, { color: 'red' }]}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.heading}>
         Welcome, {user?.isAdmin ? 'Admin' : user?.name || 'Guest'} 👋
       </Text>
@@ -86,7 +102,7 @@ export default function Dashboard() {
       ) : (
         <FlatList
           data={events}
-          keyExtractor={(item:any) => item._id}
+          keyExtractor={(item: any) => item._id}
           renderItem={({ item }) => (
             <View style={styles.card}>
               <Text style={styles.title}>{item.title}</Text>
@@ -142,6 +158,16 @@ export default function Dashboard() {
           </Text>
         </TouchableOpacity>
       </View>
+
+      {/* Floating Admin Button */}
+      {user?.isAdmin && (
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={() => router.push('/create-event')}
+        >
+          <Text style={styles.fabText}>＋</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -151,6 +177,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f0f4ff',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  link: {
+    fontSize: 14,
+    color: '#1a1a1a',
+    fontWeight: '600',
   },
   heading: {
     fontSize: 22,
@@ -226,4 +262,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#1a1a1a',
   },
+  fab: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#4f46e5',
+    borderRadius: 30,
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+  },
+  fabText: {
+    color: '#fff',
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
 });
+
