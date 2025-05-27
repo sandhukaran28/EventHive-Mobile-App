@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -21,6 +22,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchEvents = async (page = 1) => {
     try {
@@ -43,9 +45,22 @@ export default function Dashboard() {
   const getUserData = async () => {
     const storedToken = await AsyncStorage.getItem("token");
     const storedUser = await AsyncStorage.getItem("user");
+
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
+    }
+  };
+
+  const handleRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await fetchEvents(1); // fetch bookings again (or events)
+      setCurrentPage(1); // reset pagination if needed
+    } catch (err) {
+      console.error("Refresh failed:", err);
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -105,6 +120,9 @@ export default function Dashboard() {
         <FlatList
           data={events}
           keyExtractor={(item: any) => item._id}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
           renderItem={({ item }) => (
             <View style={styles.card}>
               <Text style={styles.title}>{item.title}</Text>
@@ -131,8 +149,12 @@ export default function Dashboard() {
               ) : (
                 <TouchableOpacity
                   style={styles.viewButton}
-                  onPress={() => router.push({ pathname: "/events/[id]", params: { id: item._id, fromTab: 'home' } })}
-
+                  onPress={() =>
+                    router.push({
+                      pathname: "/events/[id]",
+                      params: { id: item._id, fromTab: "home" },
+                    })
+                  }
                 >
                   <Text style={{ color: "#fff" }}>View Details</Text>
                 </TouchableOpacity>

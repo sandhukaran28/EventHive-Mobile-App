@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   SafeAreaView,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   TextInput,
@@ -57,6 +58,16 @@ export default function EventDetails() {
     if (token) fetchEvent();
   }, [token]);
 
+const handleShare = async () => {
+  try {
+    const message = `📅 Check out this event on EventHive!\n\nTitle: ${event.title}\nLocation: ${event.location}\nDate: ${new Date(event.date).toDateString()}\n\n${event.description || ''}`;
+    await Share.share({ message });
+  } catch (error) {
+    console.error('Error sharing event:', error);
+  }
+};
+
+
   const handleBooking = async () => {
     const qty = parseInt(quantity);
     if (!qty || qty < 1 || qty > event.capacity) {
@@ -90,6 +101,7 @@ export default function EventDetails() {
   }
 
   return (
+    
     <SafeAreaView style={{ flex: 1, backgroundColor: '#eef2ff' }}>
       <ScrollView contentContainerStyle={{ padding: 16, flexGrow: 1 }}>
         <View style={styles.card}>
@@ -114,6 +126,10 @@ export default function EventDetails() {
           <TouchableOpacity style={styles.bookButton} onPress={handleBooking}>
             <Text style={styles.bookButtonText}>Book Now</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
+  <Text style={styles.shareButtonText}>Share Event</Text>
+</TouchableOpacity>
+
 
           <TouchableOpacity style={styles.backButton}  onPress={() => {
     if (fromTab === 'bookings') {
@@ -227,4 +243,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
+  shareButton: {
+  marginTop: 10,
+  paddingVertical: 10,
+  borderRadius: 8,
+  backgroundColor: '#4f46e5',
+  alignItems: 'center',
+},
+shareButtonText: {
+  color: '#fff',
+  fontWeight: '600',
+  fontSize: 16,
+},
+
 });

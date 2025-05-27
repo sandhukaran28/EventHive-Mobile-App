@@ -1,11 +1,15 @@
 import axios from "@/lib/axiosConfig";
+import { FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
+import { Swipeable } from 'react-native-gesture-handler';
+
 import {
   ActivityIndicator,
   Alert,
   FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -20,11 +24,25 @@ export default function Bookings() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+    const [refreshing, setRefreshing] = useState(false);
+
+      const handleRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await fetchBookings(token,1); // fetch bookings again (or events)
+      setCurrentPage(1); // reset pagination if needed
+    } catch (err) {
+      console.error("Refresh failed:", err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const fetchBookings = async (authToken: any, page = 1) => {
     try {
       setLoading(true);
       const userStr = await AsyncStorage.getItem("user");
+      console.log("User data:", userStr && userStr);
       const isAdmin = userStr && userStr.includes("isAdmin");
       const endpoint = isAdmin ? "/bookings" : "/users/bookings";
       const res = await axios.get(`${endpoint}?page=${page}`, {
@@ -110,8 +128,22 @@ export default function Bookings() {
           <FlatList
             data={bookings}
             keyExtractor={(item) => item._id}
+             refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+                      }
             renderItem={({ item }) =>
               item.event && (
+                <Swipeable
+  renderRightActions={() => (
+    <TouchableOpacity
+      style={styles.swipeDelete}
+      onPress={() => handleToggleStatus(item._id, 'canceled')}
+    >
+      <FontAwesome name="trash" size={20} color="white" />
+      <Text style={styles.swipeDeleteText}>Cancel</Text>
+    </TouchableOpacity>
+  )}
+>
                 <View style={styles.card}>
                   <Text style={styles.title}>{item.event.title}</Text>
                   <Text style={styles.meta}>
@@ -158,6 +190,7 @@ export default function Bookings() {
                     </Text>
                   </TouchableOpacity>
                 </View>
+                    </Swipeable>
               )
             }
             ListFooterComponent={
@@ -287,4 +320,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#1a1a1a",
   },
+  swipeDelete: {
+  backgroundColor: '#ef4444',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 100,
+  borderRadius: 10,
+},
+swipeDeleteText: {
+  color: '#fff',
+  marginTop: 4,
+  fontSize: 12,
+}
+
 });
