@@ -33,6 +33,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
+          <Tabs.Screen
+        name="bookings"
+        options={{
+          title: 'Bookings',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="ticket.fill" color={color} />,
+        }}
+      />
       <Tabs.Screen
         name="profile"
         options={{
@@ -40,13 +47,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="bookings"
-        options={{
-          title: 'Bookings',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="ticket.fill" color={color} />,
-        }}
-      />
+  
       
       {/* Do not include event/[id] or any other screens here that shouldn't appear in the tab bar */}
     </Tabs>
