@@ -117,7 +117,7 @@ export default function Dashboard() {
                 <View style={styles.adminActions}>
                   <TouchableOpacity
                     style={styles.editButton}
-                    onPress={() => router.push(`/edit-event/${item._id}`)}
+                    onPress={() => router.push(`/EventForm/${item._id}`)}
                   >
                     <Text>Edit</Text>
                   </TouchableOpacity>
@@ -181,13 +181,11 @@ export default function Dashboard() {
         />
       )}
 
-
-
       {/* Floating Admin Button */}
       {user?.isAdmin && (
         <TouchableOpacity
           style={styles.fab}
-          onPress={() => router.push("/create-event")}
+          onPress={() => router.push("/EventForm")}
         >
           <Text style={styles.fabText}>＋</Text>
         </TouchableOpacity>
