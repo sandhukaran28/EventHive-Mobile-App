@@ -2,6 +2,7 @@ import axios from '@/lib/axiosConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -23,6 +24,8 @@ export default function EventDetails() {
   const [quantity, setQuantity] = useState('1');
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const { fromTab } = useLocalSearchParams();
+
 
   useEffect(() => {
     const load = async () => {
@@ -112,7 +115,13 @@ export default function EventDetails() {
             <Text style={styles.bookButtonText}>Book Now</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <TouchableOpacity style={styles.backButton}  onPress={() => {
+    if (fromTab === 'bookings') {
+      router.replace('/bookings');
+    } else {
+      router.replace('/'); // default to home tab
+    }
+  }}>
             <Text style={styles.backButtonText}>Go Back</Text>
           </TouchableOpacity>
         </View>

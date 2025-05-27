@@ -131,7 +131,8 @@ export default function Dashboard() {
               ) : (
                 <TouchableOpacity
                   style={styles.viewButton}
-                  onPress={() => router.push(`/events/${item._id}`)}
+                  onPress={() => router.push({ pathname: "/events/[id]", params: { id: item._id, fromTab: 'home' } })}
+
                 >
                   <Text style={{ color: "#fff" }}>View Details</Text>
                 </TouchableOpacity>

@@ -134,7 +134,7 @@ export default function Bookings() {
 
                   <TouchableOpacity
                     style={styles.viewButton}
-                    onPress={() => router.push(`/events/${item.event._id}`)}
+                    onPress={() => router.push({ pathname: "/events/[id]", params: { id: item.event._id, fromTab: 'bookings' } })}
                   >
                     <Text style={{ color: "#1a1a1a" }}>View Event</Text>
                   </TouchableOpacity>
