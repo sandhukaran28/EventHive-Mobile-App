@@ -39,7 +39,7 @@ export default function LoginScreen() {
       await AsyncStorage.setItem("user", JSON.stringify(user));
 
       // Redirect
-     router.replace("/(auth)/(tabs)/index");
+     router.replace("/(auth)/(tabs)");
     } catch (err: any) {
       console.error("Login failed:", err.response?.data || err.message);
 
