@@ -80,18 +80,6 @@ are handled using authenticated API requests with JWT tokens.
 
 ---
 
-## 📽️ Demo Tips (for assessment video)
-
-When recording your demo:
-- Start with splash/login
-- Navigate through **Home → Event → Book → Profile**
-- Show a failed login or network error
-- Swipe to cancel booking (admin)
-- Share event via native menu
-- Show code in `EventFormScreen.tsx`, `axiosConfig.ts`, and `bookings.tsx`
-- End with `README.md` and show project structure in VSCode
-
----
 
 ## 📜 Setup Instructions
 
@@ -106,16 +94,3 @@ npx expo start
 > 🔐 Ensure `.env` or token setup is correct if used
 
 ---
-
-## ✅ Assessment Criteria Checklist
-
-| Criteria                        | Status       |
-|-------------------------------|--------------|
-| Core: Development Workflow     | ✅ Implemented |
-| Core: Core Functionality       | ✅ Full CRUD, auth |
-| Core: UI Design                | ✅ Clean + intuitive |
-| Core: API Integration          | ✅ Connected to custom backend |
-| Additional: Safe Areas         | ✅ Implemented |
-| Additional: Status Bar         | ✅ Themed integration |
-| Additional: Gestures           | ✅ Pull-to-refresh, swipe |
-| Additional: Share              | ✅ Event sharing added |
