@@ -24,23 +24,24 @@ export default function Dashboard() {
   const [totalPages, setTotalPages] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchEvents = async (page = 1) => {
-    try {
-      setLoading(true);
-      const res = await axios.get(`/events?page=${page}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setEvents(res.data.events);
-      setTotalPages(res.data.totalPages);
-    } catch (err: any) {
-      console.error(
-        "Error fetching events:",
-        err.response?.data || err.message
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchEvents = async (page = 1) => {
+  try {
+    setLoading(true);
+    const res = await axios.get(`/events?page=${page}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setEvents(res.data.events);
+    setTotalPages(res.data.totalPages);
+  } catch (err: any) {
+    console.error(
+      "Error fetching events:",
+      err.response?.data || err.message
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const getUserData = async () => {
     const storedToken = await AsyncStorage.getItem("token");
